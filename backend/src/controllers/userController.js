@@ -1,8 +1,6 @@
 import { User } from "../models/userSchema.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
-// import admin from "firebase-admin";
-// const db = admin.database();
 
 export const Register = async (req, res) => {
   try {

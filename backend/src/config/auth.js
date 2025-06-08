@@ -1,30 +1,15 @@
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
-
-dotenv.config({
-  path: "../config/.env",
-});
+dotenv.config();
 
 const isAuthenticated = async (req, res, next) => {
   try {
     const token = req.cookies.token;
+    if (!token) return res.status(401).json({ message: "Unauthorized" });
 
-    if (!token) {
-      return res.status(401).send({
-        message: "User not Authenticated",
-        success: false,
-      });
-    }
-
-    jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
-      if (err) {
-        return res.status(401).send({
-          message: "Token is invalid or expired",
-          success: false,
-        });
-      }
-
-      req.user = decoded.user_id;
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+      if (err) return res.status(403).json({ message: "Invalid token" });
+      req.user = user.user_id; //
       next();
     });
   } catch (error) {

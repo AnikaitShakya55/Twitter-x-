@@ -5,11 +5,8 @@ import databaseConnection from "./src/db/databaseConnection.js";
 import cookieParser from "cookie-parser";
 import userRoute from "./src/routes/userRoute.js";
 import tweetRoute from "./src/routes/tweetRoute.js";
-// import "./src/config/firebase.js";
 
-dotenv.config({
-  path: ".env",
-});
+dotenv.config();
 
 databaseConnection();
 

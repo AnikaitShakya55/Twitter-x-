@@ -121,14 +121,15 @@ export const GetAllTweets = async (req, res) => {
 export const GetfollowingTweet = async (req, res) => {
   try {
     const loggedInUser = await User.findById(req.user);
-    const followingTweets = await Promise.all(
-      loggedInUser.following.map((followinguserId) => {
-        return Tweet.find({ userId: followinguserId });
-      })
-    );
-    return res.status(200).json({
-      tweets: [].concat(...followingTweets),
-    });
+    const tweets = (
+      await Promise.all(
+        loggedInUser.following.map((id) => Tweet.find({ userId: id }))
+      )
+    )
+      .flat()
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    return res.status(200).json({ tweets });
   } catch (error) {
     console.log(error);
     return res.status(500).send({
